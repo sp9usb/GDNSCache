@@ -1,0 +1,15 @@
+{
+  "name": "GDNSCache",
+  "version": "0.0.1",
+  "description": "DNS Local Cache server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "GPL 3",
+  "dependencies": {
+    "native-dns": "~0.6.1"
+  }
+}

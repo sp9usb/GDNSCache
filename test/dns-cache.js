@@ -161,4 +161,154 @@ describe('DNS-CACHE - examination', function() {
             });
         });
     });
+
+    describe('CNAME record', function() {
+        var recordType = null;
+        before(function(done){
+            recordType = 'CNAME';
+            dnsCache.resolveDns('mail.google.com', recordType,
+                function(err){
+                    resultMatrix[recordType] = helper.createDnsResult(null, err);
+                    done();
+                },
+                function(res){
+                    resultMatrix[recordType] = helper.createDnsResult(res, null);
+                    done();
+                }
+            );
+        });
+
+        it('Should be no error.', function(){
+            expect(resultMatrix[recordType].err).to.be.null;
+        });
+
+        it('Should resolve MX record.', function(){
+            expect(resultMatrix[recordType]).to.be.not.undefined;
+            expect(resultMatrix[recordType]).to.be.not.null;
+            expect(resultMatrix[recordType].res).to.be.not.undefined;
+            expect(resultMatrix[recordType].res).to.be.not.null;
+            expect(resultMatrix[recordType].res.length).to.be.not.equal(0);
+        });
+
+        it('Should proper MX address.', function(){
+            var mxArray = resultMatrix[recordType].res;
+            mxArray.forEach(function(mx){
+                expect(mx).to.be.not.null;
+                expect(mx.data).to.be.not.equal(0);
+            });
+        });
+    });
+
+    describe('PTR record', function() {
+        var recordType = null;
+        before(function(done){
+            recordType = 'PTR';
+            dnsCache.resolveDns('8.8.8.8', recordType,
+                function(err){
+                    resultMatrix[recordType] = helper.createDnsResult(null, err);
+                    done();
+                },
+                function(res){
+                    resultMatrix[recordType] = helper.createDnsResult(res, null);
+                    done();
+                }
+            );
+        });
+
+        it('Should be no error.', function(){
+            expect(resultMatrix[recordType].err).to.be.null;
+        });
+
+        it('Should resolve PTR record.', function(){
+            expect(resultMatrix[recordType]).to.be.not.undefined;
+            expect(resultMatrix[recordType]).to.be.not.null;
+            expect(resultMatrix[recordType].res).to.be.not.undefined;
+            expect(resultMatrix[recordType].res).to.be.not.null;
+            expect(resultMatrix[recordType].res.length).to.be.not.equal(0);
+        });
+
+        it('Should proper PTR address.', function(){
+            var mxArray = resultMatrix[recordType].res;
+            mxArray.forEach(function(mx){
+                expect(mx).to.be.not.null;
+                expect(mx.data).to.be.not.equal(0);
+            });
+        });
+    });
+
+    describe('TXT record', function() {
+        var recordType = null;
+        before(function(done){
+            recordType = 'TXT';
+            dnsCache.resolveDns('mail.google.com', recordType,
+                function(err){
+                    resultMatrix[recordType] = helper.createDnsResult(null, err);
+                    console.log(err);
+                    done();
+                },
+                function(res){
+                    resultMatrix[recordType] = helper.createDnsResult(res, null);
+                    done();
+                }
+            );
+        });
+
+        it('Should be no error.', function(){
+            expect(resultMatrix[recordType].err).to.be.null;
+        });
+
+        it('Should resolve TXT record.', function(){
+            expect(resultMatrix[recordType]).to.be.not.undefined;
+            expect(resultMatrix[recordType]).to.be.not.null;
+            expect(resultMatrix[recordType].res).to.be.not.undefined;
+            expect(resultMatrix[recordType].res).to.be.not.null;
+            expect(resultMatrix[recordType].res.length).to.be.not.equal(0);
+        });
+
+        it('Should proper TXT.', function(){
+            var txtArray = resultMatrix[recordType].res;
+            txtArray.forEach(function(txt){
+                expect(txt).to.be.not.null;
+                expect(txt.data).to.be.not.equal(0);
+            });
+        });
+    });
+
+    describe('SRV record', function() {
+        var recordType = null;
+        before(function(done){
+            recordType = 'SRV';
+            dnsCache.resolveDns('mail.google.com', recordType,
+                function(err){
+                    resultMatrix[recordType] = helper.createDnsResult(null, err);
+                    console.log(err);
+                    done();
+                },
+                function(res){
+                    resultMatrix[recordType] = helper.createDnsResult(res, null);
+                    done();
+                }
+            );
+        });
+
+        it('Should be no error.', function(){
+            expect(resultMatrix[recordType].err).to.be.null;
+        });
+
+        it('Should resolve SRV record.', function(){
+            expect(resultMatrix[recordType]).to.be.not.undefined;
+            expect(resultMatrix[recordType]).to.be.not.null;
+            expect(resultMatrix[recordType].res).to.be.not.undefined;
+            expect(resultMatrix[recordType].res).to.be.not.null;
+            expect(resultMatrix[recordType].res.length).to.be.not.equal(0);
+        });
+
+        it('Should proper SRV.', function(){
+            var srvArray = resultMatrix[recordType].res;
+            srvArray.forEach(function(srv){
+                expect(srv).to.be.not.null;
+                expect(srv.data).to.be.not.equal(0);
+            });
+        });
+    });
 });

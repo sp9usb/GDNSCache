@@ -16,8 +16,7 @@ module.exports = exports = function (dnsServer, unitOfWork) {
                     address: '8.8.8.8',
                     port: 53,
                     type: 'udp'
-                },
-                timeout: 1000
+                }
             });
 
             req.on('timeout', function () {

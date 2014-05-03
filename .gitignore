@@ -31,3 +31,6 @@ node_modules
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
 .idea/workspace.xml
+.idea/codeStyleSettings.xml
+.idea/jsLibraryMappings.xml
+.idea/libraries/GDNSCache_node_modules.xml

@@ -1,40 +1,43 @@
-var dns = require('native-dns');
 var unitOfWork = require('./unitOfWork')();
-var server = require('./domain/dns-cache')(dns, unitOfWork);
+var dnsCache = require('./domain/dns-cache')(unitOfWork);
+var server = require('./domain/dns-server')();
 
 server.onRequest(function (request, response) {
-    if (!request.question){
-        return;
-    }
-    request.question.forEach(function(question){
-        console.log(question);
-        var domain = question.name;
-        var type = question.type;
+  if (!request.question){
+      return;
+  }
+  request.question.forEach(function(question){
+      var domain = question.name;
+      var type = question.type;
 
-        var result = unitOfWork.inMemory.get(domain, type);
-        if (!result){
-          console.log('Record not found.');
-          server.resolveDns(domain, type, function(error){
-            console.log('Error =>'+JSON.stringify(error));
-          },
-          function(addresses){
-            addresses.forEach(function(address){
-              unitOfWork.inMemory.push(domain, type, address);
+      console.log('Question of '+domain+' type: '+type);
 
-              response.answer.push(createDnsRecord(domain, address, type));
-            });
-          });
-        } else {
-          result.forEach(function(address){
-            response.answer.push(createDnsRecord(domain, address, type));
-          });
-        }
+      var result = unitOfWork.inMemory.get(domain, type);
+      if (!result){
+        console.log('Record not found.');
+        dnsCache.resolveDns(domain, type, function(error){
+          console.log('Error =>'+JSON.stringify(error));
+        },
+        function(answer){
+          response.authority = answer.authority;
+          response.answer = answer.answer;
 
-        console.log('Database size: '+unitOfWork.inMemory.dnsResults.length);
+          try {
+            response.send();
+            unitOfWork.inMemory.push(domain, type, answer);
+          }catch(ex){
+            console.log('Domain: '+domain+', type: '+type+', exception: '+ex);
+          }
+        });
+      } else {
+        response.authority = result.authority;
+        response.answer = result.answer;
+        response.send();
+      }
+
+      console.log('Database size: '+unitOfWork.inMemory.getCacheSize());
 
   });
-
-  response.send();
 });
 
 server.start(53);

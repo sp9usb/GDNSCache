@@ -1,11 +1,11 @@
 module.exports = exports = function(){
   var dnsResults = [];
 
-  function push(domain, type, ip){
+  function push(domain, type, answer){
     dnsResults.push({
       domain: domain,
       type: type,
-      value: ip
+      answer: answer
     });
   };
 
@@ -13,17 +13,17 @@ module.exports = exports = function(){
     var res = dnsResults.filter(function(item){
       return item.domain === domain && item.type === type;
     });
-    console.log('Result => '+JSON.stringify(res));
     if(res !== null && res !== undefined && res.length > 0){
-      return res.map(function(address){
-        address.value;
-      });
+      return res[0].answer;
     }
     return null;
   };
 
   return {
     push: push,
-    get: get
+    get: get,
+    getCacheSize: function(){
+      return dnsResults.length;
+    }
   };
 };

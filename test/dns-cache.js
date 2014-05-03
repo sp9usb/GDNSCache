@@ -10,7 +10,7 @@ describe('DNS-CACHE - examination', function() {
     before(function(done) {
         dns = require('native-dns');
         unitOfWork = require('./../unitOfWork')();
-        dnsCache = require('./../domain/dns-cache')(dns, unitOfWork);
+        dnsCache = require('./../domain/dns-cache')(unitOfWork);
         done();
     });
 
@@ -43,7 +43,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper IP address.', function(){
-           var ipArray = resultMatrix[recordType].res;
+           var ipArray = resultMatrix[recordType].res.answer;
            ipArray.forEach(function(ip){
                expect(ip).to.be.not.null;
                expect(ip.address).to.match(/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/);
@@ -80,7 +80,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper IP address.', function(){
-            var ipArray = resultMatrix[recordType].res;
+            var ipArray = resultMatrix[recordType].res.answer;
             ipArray.forEach(function(ip){
                 expect(ip).to.be.not.null;
                 expect(ip.address).to.match(/^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}/);
@@ -117,7 +117,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper DATA address.', function(){
-            var nsArray = resultMatrix[recordType].res;
+            var nsArray = resultMatrix[recordType].res.answer;
             nsArray.forEach(function(ns){
                 expect(ns).to.be.not.null;
                 expect(ns.data.length).to.be.not.equal(0);
@@ -154,7 +154,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper MX address.', function(){
-            var mxArray = resultMatrix[recordType].res;
+            var mxArray = resultMatrix[recordType].res.answer;
             mxArray.forEach(function(mx){
                 expect(mx).to.be.not.null;
                 expect(mx.data).to.be.not.equal(0);
@@ -191,44 +191,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper MX address.', function(){
-            var mxArray = resultMatrix[recordType].res;
-            mxArray.forEach(function(mx){
-                expect(mx).to.be.not.null;
-                expect(mx.data).to.be.not.equal(0);
-            });
-        });
-    });
-
-    describe('PTR record', function() {
-        var recordType = null;
-        before(function(done){
-            recordType = 'PTR';
-            dnsCache.resolveDns('8.8.8.8', recordType,
-                function(err){
-                    resultMatrix[recordType] = helper.createDnsResult(null, err);
-                    done();
-                },
-                function(res){
-                    resultMatrix[recordType] = helper.createDnsResult(res, null);
-                    done();
-                }
-            );
-        });
-
-        it('Should be no error.', function(){
-            expect(resultMatrix[recordType].err).to.be.null;
-        });
-
-        it('Should resolve PTR record.', function(){
-            expect(resultMatrix[recordType]).to.be.not.undefined;
-            expect(resultMatrix[recordType]).to.be.not.null;
-            expect(resultMatrix[recordType].res).to.be.not.undefined;
-            expect(resultMatrix[recordType].res).to.be.not.null;
-            expect(resultMatrix[recordType].res.length).to.be.not.equal(0);
-        });
-
-        it('Should proper PTR address.', function(){
-            var mxArray = resultMatrix[recordType].res;
+            var mxArray = resultMatrix[recordType].res.answer;
             mxArray.forEach(function(mx){
                 expect(mx).to.be.not.null;
                 expect(mx.data).to.be.not.equal(0);
@@ -266,7 +229,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper TXT.', function(){
-            var txtArray = resultMatrix[recordType].res;
+            var txtArray = resultMatrix[recordType].res.answer;
             txtArray.forEach(function(txt){
                 expect(txt).to.be.not.null;
                 expect(txt.data).to.be.not.equal(0);
@@ -304,7 +267,7 @@ describe('DNS-CACHE - examination', function() {
         });
 
         it('Should proper SRV.', function(){
-            var srvArray = resultMatrix[recordType].res;
+            var srvArray = resultMatrix[recordType].res.answer;
             srvArray.forEach(function(srv){
                 expect(srv).to.be.not.null;
                 expect(srv.data).to.be.not.equal(0);

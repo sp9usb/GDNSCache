@@ -40,4 +40,8 @@ server.onRequest(function (request, response) {
   });
 });
 
+server.onError(function(error, stack){
+  console.error('Error: '+error+' => stack: '+stack);
+});
+
 server.start(53);

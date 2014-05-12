@@ -1,5 +1,6 @@
-var unitOfWork = require('./unitOfWork')();
-var dnsCache = require('./domain/dns-cache')(unitOfWork);
+var config = require('./config');
+var unitOfWork = require('./unitOfWork')(config);
+var dnsCache = require('./domain/dns-cache')(unitOfWork, config);
 var server = require('./domain/dns-server')();
 
 server.onRequest(function (request, response) {

@@ -34,3 +34,4 @@ node_modules
 .idea/codeStyleSettings.xml
 .idea/jsLibraryMappings.xml
 .idea/libraries/GDNSCache_node_modules.xml
+daemon/

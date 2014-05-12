@@ -1,9 +1,18 @@
-module.exports = exports = function (unitOfWork) {
+module.exports = exports = function (unitOfWork, config) {
   var dns = require('native-dns');
-  var unitOfWork = unitOfWork;
 
   return {
     resolveDns: function (domain, type, err, res) {
+      function nextDnsServer(currentDns){
+        var indexOfCurrentDns = config.DNS_SERVER.indexOf(currentDns);
+        if (indexOfCurrentDns < config.DNS_SERVER.length-1){
+          return config.DNS_SERVER[indexOfCurrentDns+1];
+        } else {
+          return null;
+        }
+      }
+
+      var masterDns = config.DNS_SERVER[0];
       var question = dns.Question({
         name: domain,
         type: type
@@ -12,14 +21,22 @@ module.exports = exports = function (unitOfWork) {
       var req = dns.Request({
         question: question,
         server: {
-          address: '8.8.8.8',
+          address: masterDns,
           port: 53,
           type: 'udp'
         }
       });
 
       req.on('timeout', function () {
-        err('timeout');
+        var lastDns = req.server.address;
+        var masterDns = nextDnsServer(lastDns);
+        if (masterDns) {
+          console.log('Request to: ' + lastDns + ', next DNS in queue: '+masterDns);
+          req.server.address = masterDns;
+          req.send();
+        }else {
+          err('timeout ' + domain + ' type: ' + type);
+        }
       });
 
       req.on('message', function (error, answer) {

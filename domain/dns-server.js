@@ -16,7 +16,7 @@ module.exports = exports = function () {
         server.on('socketError', error);
       }
     },
-    start: function (port) {
+    start: function (port, dnsServerList) {
       server.serve(port);
     }
   }

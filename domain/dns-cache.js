@@ -1,5 +1,6 @@
 module.exports = exports = function (unitOfWork, config) {
   var dns = require('native-dns');
+  var logger = require('../logger')();
 
   return {
     resolveDns: function (domain, type, err, res) {
@@ -31,7 +32,8 @@ module.exports = exports = function (unitOfWork, config) {
         var lastDns = req.server.address;
         var masterDns = nextDnsServer(lastDns);
         if (masterDns) {
-          console.log('Request to: ' + lastDns + ', next DNS in queue: '+masterDns);
+
+          logger.info('Request to: ' + lastDns + ', next DNS in queue: '+masterDns);
           req.server.address = masterDns;
           req.send();
         }else {

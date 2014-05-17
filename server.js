@@ -2,6 +2,7 @@ var config = require('./config');
 var unitOfWork = require('./unitOfWork')(config);
 var dnsCache = require('./domain/dns-cache')(unitOfWork, config);
 var server = require('./domain/dns-server')();
+var logger = require('./logger')();
 
 server.onRequest(function (request, response) {
   if (!request.question){
@@ -11,13 +12,13 @@ server.onRequest(function (request, response) {
       var domain = question.name;
       var type = question.type;
 
-      console.log('Question of '+domain+' type: '+type);
+      logger.info('Question of '+domain+' type: '+type);
 
       var result = unitOfWork.inMemory.get(domain, type);
       if (!result){
-        console.log('Record not found.');
+        logger.info('Record not found.');
         dnsCache.resolveDns(domain, type, function(error){
-          console.log('Error =>'+JSON.stringify(error));
+          logger.debug('Error =>'+JSON.stringify(error));
         },
         function(answer){
           response.authority = answer.authority;
@@ -27,7 +28,7 @@ server.onRequest(function (request, response) {
             response.send();
             unitOfWork.inMemory.push(domain, type, answer);
           }catch(ex){
-            console.log('Domain: '+domain+', type: '+type+', exception: '+ex);
+            logger.debug('Domain: '+domain+', type: '+type+', exception: '+ex);
           }
         });
       } else {
@@ -36,13 +37,12 @@ server.onRequest(function (request, response) {
         response.send();
       }
 
-      console.log('Database size: '+unitOfWork.inMemory.getCacheSize());
-
+      logger.info('Database size: '+unitOfWork.inMemory.getCacheSize());
   });
 });
 
 server.onError(function(error, stack){
-  console.error('Error: '+error+' => stack: '+stack);
+  logger.warn('Error: '+error+' => stack: '+stack);
 });
 
-server.start(53);
+server.start(config.DNS_PORT | 53);

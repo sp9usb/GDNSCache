@@ -13,7 +13,8 @@
     "native-dns": "~0.6.1",
     "node-cache": "~1.0.0",
     "windows-service": "~1.0.2",
-    "node-windows": "~0.1.5"
+    "node-windows": "~0.1.5",
+    "winston": "~0.7.3"
   },
   "devDependencies": {
     "mocha": "~1.18.2",

@@ -1,6 +1,7 @@
 module.exports = exports = function(config){
   var dnsResults = [];
   var config = config;
+  var logger = require('../../logger')();
 
   function push(domain, type, answer){
     var theDnsRecord = {
@@ -12,7 +13,7 @@ module.exports = exports = function(config){
     setTimeout(function(){
       var indexOfDnsRecordToRemove = dnsResults.indexOf(theDnsRecord);
       dnsResults.splice(indexOfDnsRecordToRemove, 1);
-      console.log('Removed old record '+theDnsRecord.domain);
+      logger.log('Removed old record '+theDnsRecord.domain);;
     }, config.TIME_TO_REMOVE_RECORD_FROM_CACHE*1000);
   };
 

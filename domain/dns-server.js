@@ -1,10 +1,24 @@
 module.exports = exports = function () {
-  var dns = require('native-dns');
-  var server = dns.createServer();
+  var server = require('native-dns').createServer();
+
+  server.on('end', function(){
+      console.log('Closed connection');
+  });
 
   return {
     onRequest: function (callback) {
-      server.on('request', callback);
+      server.on('request', function(request, response){
+          console.log('Request');
+          try {
+              if (callback) {
+                  callback(request, response);
+              } else {
+                  throw 'OnRequest callback is not registred!';
+              }
+          } finally {
+
+          }
+      });
     },
     onError: function (callback) {
       function error(error, stack){

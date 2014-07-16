@@ -13,9 +13,9 @@ module.exports = exports = function(config){
     setTimeout(function(){
       var indexOfDnsRecordToRemove = dnsResults.indexOf(theDnsRecord);
       dnsResults.splice(indexOfDnsRecordToRemove, 1);
-      logger.log('Removed old record '+theDnsRecord.domain);;
+      logger.log('Removed old record '+theDnsRecord.domain);
     }, config.TIME_TO_REMOVE_RECORD_FROM_CACHE*1000);
-  };
+  }
 
   function get(domain, type){
     var res = dnsResults.filter(function(item){
@@ -25,7 +25,7 @@ module.exports = exports = function(config){
       return res[0].answer;
     }
     return null;
-  };
+  }
 
   return {
     push: push,

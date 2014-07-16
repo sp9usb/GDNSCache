@@ -4,14 +4,6 @@ module.exports = exports = function (unitOfWork, config) {
 
   return {
     resolveDns: function (domain, type, err, res) {
-//      function nextDnsServer(currentDns){
-//        var indexOfCurrentDns = config.DNS_SERVER.indexOf(currentDns);
-//        if (indexOfCurrentDns < config.DNS_SERVER.length-1){
-//          return config.DNS_SERVER[indexOfCurrentDns+1];
-//        } else {
-//          return null;
-//        }
-//      }
       function collectingResolvedDnsData(result){
           if (result){
               res(result);
@@ -42,7 +34,6 @@ module.exports = exports = function (unitOfWork, config) {
               if (error) {
                   err(error);
               }
-              console.log('OK');
               collectingResolvedDnsData(answer);
           });
 

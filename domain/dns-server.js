@@ -8,7 +8,6 @@ module.exports = exports = function () {
   return {
     onRequest: function (callback) {
       server.on('request', function(request, response){
-          console.log('Request');
           try {
               if (callback) {
                   callback(request, response);

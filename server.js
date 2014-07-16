@@ -18,9 +18,7 @@ domain.run(function(){
             var type = question.type;
 
             logger.info('Question of '+domain+' type: '+type);
-            console.log('Before memory');
             var result = unitOfWork.inMemory.get(domain, type);
-            console.log('After memory');
             if (!result){
                 logger.info('Record not found.');
                 dnsCache.resolveDns(domain, type, function(error){
@@ -42,7 +40,6 @@ domain.run(function(){
                 response.authority = result.authority;
                 response.answer = result.answer;
                 response.send();
-                console.log('Send is finished');
             }
 
             logger.info('Database size: '+unitOfWork.inMemory.getCacheSize());

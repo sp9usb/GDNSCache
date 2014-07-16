@@ -12,7 +12,7 @@ module.exports = exports = function(){
     ],
     exceptionHandlers: [
       new (winston.transports.Console)({ json: false, timestamp: true }),
-      new winston.transports.File({ filename: __dirname + '/exceptions.log', json: false })
+      new winston.transports.File({ filename: __dirname + '/exceptions.log', json: true })
     ],
     exitOnError: false
   });
